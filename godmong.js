@@ -1,4 +1,4 @@
-import mongoose from 'mongoose'
+/**import mongoose from 'mongoose'
 
 const MONGO_URL = process.env.MONGO_URL
 
@@ -13,7 +13,9 @@ if (!MONGO_URL) {
  * in development. This prevents connections growing exponentially
  * during API Route usage.
  */
-let cached = global.mongoose
+ import mongoose from 'mongoose'
+ 
+/**let cached = global.mongoose
 
 if (!cached) {
   cached = global.mongoose = { conn: null, promise: null }
@@ -29,10 +31,31 @@ async function dbConnect() {
       bufferCommands: false,
     }
 
-    cached.promise = mongoose.connect(process.env.MONGO_URL);
+    cached.promise = mongoose.connect(MONGO_URL, opts).then((mongoose) => {
+      return mongoose
+    })
   }
   cached.conn = await cached.promise
   return cached.conn
 }
+*/
 
-export default dbConnect
+//export default dbConnect
+
+
+
+//const mongoose = require("mongoose");
+
+const dbConnect = async () => {
+  try {
+    const conn = await mongoose.connect(process.env.MONGO_URL);
+
+    console.log(`MongoDB Connected: ${conn.connection.host}`);
+  } catch (err) {
+    console.error(err);
+    process.exit(1);
+  }
+};
+
+export default dbConnect;
+
